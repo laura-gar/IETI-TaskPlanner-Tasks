@@ -1,17 +1,14 @@
 package com.taskplanner.tasks.controller;
 
-import com.taskplanner.tasks.dto.TaskDto;
-import com.taskplanner.tasks.entities.Task;
-import com.taskplanner.tasks.service.TaskService;
+import java.util.List;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.taskplanner.tasks.dto.TaskDto;
 import org.springframework.http.HttpStatus;
+import com.taskplanner.tasks.entities.Task;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.taskplanner.tasks.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Laura Garcia
@@ -27,13 +24,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDto>> getAll(){
-        List<Task> tasks = taskService.getAll();
-        List<TaskDto> tasksDto = new ArrayList<>();
-        for(Task task : tasks){
-            TaskDto taskDto = modelMapper.map(task, TaskDto.class);
-            tasksDto.add(taskDto);
-        }
-        return new ResponseEntity<>(tasksDto, HttpStatus.OK);
+        return new ResponseEntity<>(taskService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +36,11 @@ public class TaskController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 
+    @GetMapping("/assignedTo/{userId}")
+    public ResponseEntity<List<TaskDto>> getTasksByUser(@PathVariable String userId){
+        return new ResponseEntity<>(taskService.getTasksByUserId(userId), HttpStatus.OK);
     }
 
     @PostMapping
@@ -54,14 +49,12 @@ public class TaskController {
         System.out.println(task.getId());
         taskService.create(task);
         return new ResponseEntity<>(taskDto, HttpStatus.OK);
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskDto> update(@RequestBody TaskDto task, @PathVariable String id){
         try{
-            Task taskMp = modelMapper.map(task, Task.class);
-            TaskDto taskDto =  modelMapper.map(taskService.update(taskMp, id), TaskDto.class);
+            TaskDto taskDto =  modelMapper.map(taskService.update(task, id), TaskDto.class);
             return new ResponseEntity<>(taskDto, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

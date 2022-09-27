@@ -1,6 +1,9 @@
 package com.taskplanner.tasks.entities;
 
+import com.taskplanner.tasks.dto.TaskDto;
 import com.taskplanner.tasks.utils.Status;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -8,7 +11,10 @@ import java.util.UUID;
 /**
  * @author Laura Garcia
  */
+
+@Document(collection = "tasks")
 public class Task {
+    @Id
     private String id;
     private String name;
     private String description;
@@ -29,6 +35,14 @@ public class Task {
         this.status = status;
         this.assignedTo = assignedTo;
         this.dueDate = dueDate;
+    }
+
+    public void update(TaskDto taskDto){
+        name = taskDto.getName();
+        description = taskDto.getDescription();
+        status = taskDto.getStatus();
+        assignedTo = taskDto.getAssignedTo();
+        dueDate = taskDto.getDueDate();
     }
 
     public String getId() {
