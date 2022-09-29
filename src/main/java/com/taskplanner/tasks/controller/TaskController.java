@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/tasks")
 public class TaskController {
     private final TaskService taskService;
