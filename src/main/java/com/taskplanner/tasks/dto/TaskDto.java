@@ -6,6 +6,7 @@ import com.taskplanner.tasks.utils.Status;
  * @author Laura Garcia
  */
 public class TaskDto {
+    private String id;
     private String name;
     private String description;
     private Status status;
@@ -20,6 +21,14 @@ public class TaskDto {
         this.status = status;
         this.assignedTo = assignedTo;
         this.dueDate = dueDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
